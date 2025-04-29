@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-lk$7(#$gu%za%a=ez%0_j5-$#xugb5y(vdiccys@3n0$gz(_0e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["www.fasolaki.com", "fasolaki.com"]
 
 
 # Application definition
