@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fasolaki</title>
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/website/css/style.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-content">
+            <a href="/" class="logo">Fasolaki</a>
+            <div class="nav-links">
+                <a href="/" hx-get="/" hx-target="#content" hx-push-url="true">Home</a>
+                <a href="/projects" hx-get="/projects" hx-target="#content" hx-push-url="true">Projects</a>
+                <a href="/blog" hx-get="/blog" hx-target="#content" hx-push-url="true">Writing</a>
+            </div>
+        </div>
+    </nav>
+
+    <main id="content">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
