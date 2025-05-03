@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+<div class="blog-index">
+    <h1>{{ page.title }}</h1>
+    
+    {% if page.intro %}
+    <div class="intro">{{ page.intro|richtext }}</div>
+    {% endif %}
+
+    {% with posts=page.get_blog_posts %}
+        {% if posts %}
+            <div class="blog-posts">
+                {% for post in posts %}
+                    <article class="blog-post-preview">
+                        <h2><a href="{% pageurl post %}">{{ post.title }}</a></h2>
+                        {% if post.date %}
+                            <p class="post-date">{{ post.date }}</p>
+                        {% endif %}
+                        {% if post.intro %}
+                            <p class="post-intro">{{ post.intro }}</p>
+                        {% endif %}
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No blog posts found.</p>
+        {% endif %}
+    {% endwith %}
+</div>
+{% endblock %}

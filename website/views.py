@@ -5,6 +5,3 @@ def home(request):
 
 def projects(request):
     return render(request, 'website/projects.html')
-
-def writing(request):
-    return render(request, 'website/blog.html')
