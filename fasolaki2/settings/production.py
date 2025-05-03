@@ -27,5 +27,5 @@ SECURE_HSTS_PRELOAD = True
 ALLOWED_HOSTS = ['www.fasolaki.com', 'fasolaki.com']
 
 # Static and media files
-STATIC_ROOT = '/var/www/fasolaki/static/'
-MEDIA_ROOT = '/var/www/fasolaki/media/'
+STATIC_ROOT = '/home/chrys/Projects/my_website/static/'
+MEDIA_ROOT = '/home/chrys/Projects/my_website/media/'
