@@ -170,7 +170,7 @@ LOGGING = {
         'file': {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
-            'filename': '/var/log/django/fasolaki.log',
+            'filename': '/home/chrys/Projects/my_website/fasolaki.log',
             'formatter': 'verbose',
         },
     },
