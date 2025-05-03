@@ -5,7 +5,7 @@ DEBUG = False
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'fasolaki'),
+        'NAME': os.environ.get('DB_NAME', 'fasolaki_db'),
         'USER': os.environ.get('DB_USER', 'fasolaki_user'),
         'PASSWORD': os.environ.get('DB_PASSWORD'),
         'HOST': os.environ.get('DB_HOST', 'localhost'),
