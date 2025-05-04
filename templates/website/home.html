@@ -1,10 +1,47 @@
 {% extends "base.html" %}
+{% load wagtailcore_tags %}
 
 {% block content %}
 <div class="home-content">
     <h1>Welcome to Fasolaki</h1>
     <div class="intro">
-        <p>bla bla bla</p>
+        <p>An analyst pretending to be a programmer.</p>
     </div>
 </div>
+
+<section class="latest-article">
+    <h2>My Latest Article</h2>
+    {% if latest_post %}
+        <article class="blog-post-preview">
+            <h3><a href="{% pageurl latest_post %}">{{ latest_post.title }}</a></h3>
+            {% if latest_post.date %}
+                <p class="post-date">{{ latest_post.date }}</p>
+            {% endif %}
+            {% if latest_post.intro %}
+                <p class="post-intro">{{ latest_post.intro }}</p>
+            {% endif %}
+        </article>
+    {% else %}
+        <p>No articles published yet.</p>
+    {% endif %}
+</section>
+
+<section class="github-activity">
+    <h2>My Github Calendar</h2>
+    <div class="calendar"></div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/github-calendar@latest/dist/github-calendar-responsive.css"/>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/github-calendar@latest/dist/github-calendar.min.js"></script>
+<script>
+    GitHubCalendar(".calendar", "chrys", { 
+        responsive: true,
+        tooltips: true 
+    });
+</script>
 {% endblock %}

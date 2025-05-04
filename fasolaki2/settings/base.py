@@ -168,7 +168,7 @@ LOGGING = {
         'file': {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
-            'filename': '/home/chrys/Projects/my_website/fasolaki.log',
+            'filename': BASE_DIR / 'logs' / 'fasolaki.log',
             'formatter': 'verbose',
         },
     },

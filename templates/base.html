@@ -5,30 +5,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fasolaki</title>
-    <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <!-- Navigation outside the main content area -->
     <nav class="top-nav">
         <div class="nav-content">
             <a href="/" class="logo">Fasolaki</a>
             <div class="nav-links">
-                <a href="/" hx-get="/" hx-target="#content" hx-push-url="true" hx-swap="innerHTML">Home</a>
-                <a href="/projects" hx-get="/projects" hx-target="#content" hx-push-url="true" hx-swap="innerHTML">Projects</a>
-                <a href="/blog/blog-2025" hx-get="/blog" hx-target="#content" hx-push-url="true" hx-swap="innerHTML">Blog</a>
+                <a href="/" hx-get="/" hx-target="#main-content" hx-push-url="true">Home</a>
+                <a href="/projects" hx-get="/projects" hx-target="#main-content" hx-push-url="true">Projects</a>
+                <a href="/blog/blog-2025/" hx-get="/blog/blog-2025/" hx-target="#main-content" hx-push-url="true">Blog</a>
             </div>
         </div>
     </nav>
 
-    <!-- Content area that will be swapped by HTMX -->
     <main>
-        <div id="content" hx-preserve>
-            {% block content %}
-            {% endblock %}
+        <div id="main-content">
+            {% block content %}{% endblock %}
         </div>
     </main>
+
+    {% block extra_js %}{% endblock %}
 </body>
 </html>
