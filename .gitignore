@@ -90,4 +90,5 @@ local_settings.py
 .env
 db.sqlite3
 
-/logs/
+logs/
+config_files/
