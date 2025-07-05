@@ -32,6 +32,7 @@ STATIC_ROOT = '/srv/My-Personal-Website/staticfiles/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = '/srv/My-Personal-Website/media/'
 
+
 # Logging configuration for journalctl
 LOGGING = {
     'version': 1,
