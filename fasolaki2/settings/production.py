@@ -26,6 +26,52 @@ SECURE_HSTS_PRELOAD = True
 
 ALLOWED_HOSTS = ['www.fasolaki.com', 'fasolaki.com']
 
-# Static and media files
-STATIC_ROOT = '/home/chrys/Projects/my_website/staticfiles/'
-MEDIA_ROOT = '/home/chrys/Projects/my_website/media/'
+# Static and media files - Updated paths for production
+STATIC_URL = '/static/'
+STATIC_ROOT = '/srv/My-Personal-Website/staticfiles/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/srv/My-Personal-Website/media/'
+
+# Logging configuration for journalctl
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': '/srv/My-Personal-Website/logs/django.log',
+            'formatter': 'verbose',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'fasolaki2': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
