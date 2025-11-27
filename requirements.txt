@@ -1,0 +1,7 @@
+Django
+wagtail
+psycopg2-binary
+django-taggit
+python-dotenv
+gunicorn
+requests
