@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from blog.models import BlogPage
+from django.views.decorators.http import require_http_methods
 from django.core.cache import cache
 import requests
 import os
@@ -94,15 +94,16 @@ def get_github_contributions():
         return None
 
 def home(request):
-    latest_post = BlogPage.objects.live().public().order_by('-first_published_at').first()
     latest_medium = get_latest_medium_article()
     github_contributions = get_github_contributions()
     
     return render(request, 'website/home.html', {
-        'latest_post': latest_post,
         'latest_medium': latest_medium,
         'github_contributions': github_contributions
     })
 
+@require_http_methods(["GET", "HEAD"])
 def projects(request):
-    return render(request, 'website/projects.html')
+    """Redirect to portfolio projects page"""
+    from django.shortcuts import redirect
+    return redirect('portfolio:projects_list')

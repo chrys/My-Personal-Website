@@ -1,7 +1,7 @@
 Django
-wagtail
 psycopg2-binary
-django-taggit
 python-dotenv
 gunicorn
 requests
+Pillow
+argon2-cffi
