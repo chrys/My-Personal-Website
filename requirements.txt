@@ -5,3 +5,4 @@ gunicorn
 requests
 Pillow
 argon2-cffi
+django-ckeditor-5

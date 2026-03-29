@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-blue: #2563eb;
+        --secondary-gray: #4b5563;
+        --bg-glass: rgba(255, 255, 255, 0.8);
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    }
+
+    .blog-container {
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 0 1.5rem;
+    }
+
+    .blog-header {
+        text-align: center;
+        margin-bottom: 4rem;
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        color: white;
+        padding: 4rem 2rem;
+        border-radius: 1.5rem;
+        box-shadow: var(--shadow-md);
+    }
+
+    .blog-header h1 {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        letter-spacing: -0.025em;
+    }
+
+    .blog-header p {
+        font-size: 1.25rem;
+        opacity: 0.9;
+    }
+
+    .tag-indicator {
+        display: inline-block;
+        background: #3b82f6;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .post-card {
+        background: var(--bg-glass);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 1.25rem;
+        padding: 2.5rem;
+        margin-bottom: 2.5rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .post-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .post-card h2 {
+        font-size: 2.25rem;
+        margin-bottom: 1rem;
+        color: #111827;
+    }
+
+    .post-card h2 a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .post-card h2 a:hover {
+        color: var(--primary-blue);
+    }
+
+    .post-meta {
+        display: flex;
+        gap: 1.5rem;
+        color: var(--secondary-gray);
+        font-size: 0.875rem;
+        margin-bottom: 1.5rem;
+        align-items: center;
+    }
+
+    .post-meta .tag-badge {
+        background: #f1f5f9;
+        color: #475569;
+        padding: 0.25rem 0.6rem;
+        border-radius: 6px;
+        text-decoration: none;
+    }
+
+    .post-excerpt {
+        color: #374151;
+        line-height: 1.8;
+        font-size: 1.125rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .read-more {
+        display: inline-block;
+        margin-top: 1.5rem;
+        color: var(--primary-blue);
+        font-weight: 600;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 4rem;
+    }
+
+    .pagination a, .pagination span {
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        background: white;
+        color: #111827;
+        font-weight: 500;
+        border: 1px solid #e5e7eb;
+    }
+
+    .pagination .active {
+        background: var(--primary-blue);
+        color: white;
+        border-color: var(--primary-blue);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="blog-container">
+    <header class="blog-header">
+        {% if tag %}
+            <span class="tag-indicator">Filtering by Tag: {{ tag.name }}</span>
+        {% endif %}
+        <h1>Fasolaki Blog</h1>
+        <p>Thoughts, tutorials, and adventures in tech and beyond.</p>
+    </header>
+
+    <div class="posts-list">
+        {% for post in posts %}
+            <article class="post-card">
+                <div class="post-meta">
+                    <time datetime="{{ post.published_date|date:'Y-m-d' }}">{{ post.published_date|date:"F j, Y" }}</time>
+                    <div class="tags">
+                        {% for pt in post.tags.all %}
+                            <a href="{% url 'blog:post_list_by_tag' pt.slug %}" class="tag-badge">{{ pt.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <h2><a href="{% url 'blog:post_detail' post.slug %}">{{ post.title }}</a></h2>
+                <div class="post-excerpt">
+                    {{ post.content|striptags|truncatewords:40 }}
+                </div>
+                <a href="{% url 'blog:post_detail' post.slug %}" class="read-more">
+                    Read continuation →
+                </a>
+            </article>
+        {% empty %}
+            <div class="no-posts" style="text-align: center; padding: 4rem;">
+                <p style="font-size: 1.5rem; color: #6b7280;">No posts found yet. Check back soon!</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if posts.has_other_pages %}
+        <nav class="pagination">
+            {% if posts.has_previous %}
+                <a href="?page={{ posts.previous_page_number }}{% if tag %}&tag={{ tag.slug }}{% endif %}">Previous</a>
+            {% endif %}
+
+            {% for i in posts.paginator.page_range %}
+                {% if posts.number == i %}
+                    <span class="active">{{ i }}</span>
+                {% else %}
+                    <a href="?page={{ i }}{% if tag %}&tag={{ tag.slug }}{% endif %}">{{ i }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if posts.has_next %}
+                <a href="?page={{ posts.next_page_number }}{% if tag %}&tag={{ tag.slug }}{% endif %}">Next</a>
+            {% endif %}
+        </nav>
+    {% endif %}
+</div>
+{% endblock %}

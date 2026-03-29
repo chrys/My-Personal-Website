@@ -5,6 +5,10 @@
     --nav-height: 64px;
 }
 
+html {
+    overflow-y: scroll;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -20,16 +24,20 @@ body {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     z-index: 1000;
+    left: 0;
+    right: 0;
 }
 
 .nav-content {
-    max-width: 1200px;
-    margin: 0 auto;
+    max-width: 100%;
+    width: 100%;
+    margin: 0;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 2rem;
+    box-sizing: border-box;
 }
 
 .logo {

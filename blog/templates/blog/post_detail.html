@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    .post-detail-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 0 1.5rem;
+    }
+
+    .post-header {
+        margin-bottom: 3rem;
+        text-align: center;
+    }
+
+    .post-meta {
+        color: #6b7280;
+        font-size: 0.875rem;
+        margin-bottom: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    .post-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        color: #111827;
+        margin-bottom: 2rem;
+        line-height: 1.2;
+    }
+
+    .tag-container {
+        display: flex;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-bottom: 3rem;
+    }
+
+    .tag-badge {
+        background: #f1f5f9;
+        color: #475569;
+        padding: 0.5rem 1rem;
+        border-radius: 9999px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .tag-badge:hover {
+        background: #3b82f6;
+        color: white;
+    }
+
+    .post-content {
+        font-size: 1.25rem;
+        line-height: 1.95;
+        color: #374151;
+        margin-bottom: 5rem;
+        word-break: break-word;
+    }
+
+    .post-content h1, .post-content h2, .post-content h3 {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        color: #111827;
+    }
+
+    .post-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 1rem;
+        margin: 2rem 0;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .comment-section {
+        border-top: 1px solid #e5e7eb;
+        padding-top: 4rem;
+        margin-top: 4rem;
+    }
+
+    .comment-section h3 {
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 3rem;
+        color: #111827;
+    }
+
+    .comments-list {
+        margin-bottom: 5rem;
+    }
+
+    .comment-item {
+        background: #f9fafb;
+        padding: 2rem;
+        border-radius: 1rem;
+        margin-bottom: 2rem;
+        border: 1px solid #f3f4f6;
+    }
+
+    .comment-meta {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #4b5563;
+    }
+
+    .comment-body {
+        color: #374151;
+        line-height: 1.6;
+    }
+
+    .comment-form-container {
+        background: white;
+        padding: 3rem;
+        border-radius: 1.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e5e7eb;
+    }
+
+    .comment-form-container h4 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid #d1d5db;
+        transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        outline: none;
+    }
+
+    .btn-submit {
+        background: #2563eb;
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 0.5rem;
+        border: none;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+
+    .btn-submit:hover {
+        background: #1d4ed8;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<article class="post-detail-container">
+    <header class="post-header">
+        <div class="post-meta">
+            {{ post.published_date|date:"F j, Y" }} — By {{ post.author.get_full_name|default:post.author.username }}
+        </div>
+        <h1 class="post-title">{{ post.title }}</h1>
+        <div class="tag-container">
+            {% for pt in post.tags.all %}
+                <a href="{% url 'blog:post_list_by_tag' pt.slug %}" class="tag-badge">#{{ pt.name }}</a>
+            {% endfor %}
+        </div>
+    </header>
+
+    <div class="post-content">
+        {{ post.content|safe }}
+    </div>
+
+    <section class="comment-section">
+        <h3>{{ comments.count }} Comments</h3>
+
+        <div class="comments-list">
+            {% for comment in comments %}
+                <div class="comment-item">
+                    <div class="comment-meta">
+                        <span class="comment-author">{{ comment.name }}</span>
+                        <span class="comment-date">{{ comment.created_date|date:"M j, Y" }}</span>
+                    </div>
+                    <div class="comment-body">
+                        {{ comment.body|linebreaks }}
+                    </div>
+                </div>
+            {% empty %}
+                <p style="color: #6b7280; font-style: italic;">No comments yet. Be the first to start the conversation!</p>
+            {% endfor %}
+        </div>
+
+        <div class="comment-form-container">
+            <h4>Leave a Response</h4>
+            <form method="post" action=".">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ comment_form.name.label_tag }}
+                    {{ comment_form.name }}
+                    {{ comment_form.name.errors }}
+                </div>
+                <div class="form-group">
+                    {{ comment_form.email.label_tag }}
+                    {{ comment_form.email }}
+                    {{ comment_form.email.errors }}
+                </div>
+                <div class="form-group">
+                    {{ comment_form.body.label_tag }}
+                    {{ comment_form.body }}
+                    {{ comment_form.body.errors }}
+                </div>
+                <button type="submit" class="btn-submit">Post Comment</button>
+            </form>
+        </div>
+    </section>
+</article>
+{% endblock %}

@@ -2,8 +2,10 @@
 
 {% block content %}
 <div class="projects-content">
-    <h1>Projects</h1>
-    <p class="projects-intro">A collection of my professional projects and open-source contributions.</p>
+    <header class="projects-header">
+        <h1>Projects</h1>
+        <p class="projects-intro">A collection of my professional projects and open-source contributions.</p>
+    </header>
     
     <div class="projects-grid">
         {% for project in projects %}
@@ -45,164 +47,165 @@
 
 {% block extra_css %}
 <style>
+    :root {
+        --primary-blue: #2563eb;
+        --secondary-gray: #4b5563;
+        --bg-glass: rgba(255, 255, 255, 0.8);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    }
+
     .projects-content {
-        padding: 2rem;
-        max-width: 1400px;
+        padding: 4rem 1.5rem;
+        max-width: 1200px;
         margin: 0 auto;
     }
 
-    .projects-content h1 {
-        color: var(--primary);
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
+    .projects-header {
         text-align: center;
+        margin-bottom: 4rem;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: white;
+        padding: 4rem 2rem;
+        border-radius: 1.5rem;
+        box-shadow: var(--shadow-md);
+    }
+
+    .projects-header h1 {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        letter-spacing: -0.025em;
     }
 
     .projects-intro {
-        text-align: center;
-        color: var(--secondary);
-        font-size: 1.1rem;
-        margin-bottom: 3rem;
+        font-size: 1.25rem;
+        opacity: 0.9;
+        max-width: 600px;
+        margin: 0 auto;
     }
 
     .projects-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        grid-template-columns: repeat(3, 1fr);
         gap: 2rem;
-        margin-top: 2rem;
     }
 
-    @media (min-width: 1024px) {
-        .projects-grid {
-            grid-template-columns: repeat(3, 1fr);
-        }
-    }
-
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
         .projects-grid {
             grid-template-columns: repeat(2, 1fr);
         }
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 640px) {
         .projects-grid {
             grid-template-columns: 1fr;
         }
     }
 
     .project-card {
-        background: white;
-        border-radius: 12px;
+        background: var(--bg-glass);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 1.25rem;
         overflow: hidden;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         display: flex;
         flex-direction: column;
         height: 100%;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
     .project-card:hover {
         transform: translateY(-8px);
-        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        border-color: rgba(37, 99, 235, 0.2);
     }
 
     .project-image {
         width: 100%;
-        height: 180px;
+        height: 160px; /* Smaller height as requested */
         overflow: hidden;
-        background: linear-gradient(135deg, var(--primary), var(--secondary));
-        flex-shrink: 0;
+        background: #f1f5f9;
+        position: relative;
     }
 
     .project-image img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        object-position: center;
-        transition: transform 0.3s ease;
+        transition: transform 0.6s ease;
     }
 
     .project-card:hover .project-image img {
-        transform: scale(1.05);
-    }
-
-    .project-image-placeholder {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 1.2rem;
+        transform: scale(1.1);
     }
 
     .project-content {
-        padding: 1.5rem;
+        padding: 1.75rem;
         flex-grow: 1;
         display: flex;
         flex-direction: column;
     }
 
     .project-name {
-        color: var(--primary);
         font-size: 1.5rem;
-        margin: 0 0 0.5rem 0;
-        word-wrap: break-word;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 0.75rem;
     }
 
     .project-description {
-        color: #666;
+        color: #4b5563;
         font-size: 0.95rem;
-        margin: 0 0 1rem 0;
-        line-height: 1.5;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        flex-grow: 1;
     }
 
     .project-links {
         display: flex;
-        gap: 1rem;
-        margin-top: auto;
+        gap: 0.75rem;
     }
 
     .project-link {
         flex: 1;
-        padding: 0.75rem 1rem;
+        padding: 0.6rem 1rem;
         text-align: center;
-        border-radius: 6px;
+        border-radius: 0.75rem;
         text-decoration: none;
         font-weight: 600;
-        transition: all 0.3s ease;
+        font-size: 0.875rem;
+        transition: all 0.2s ease;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.95rem;
     }
 
     .project-link-primary {
-        background: var(--primary);
+        background: #2563eb;
         color: white;
     }
 
     .project-link-primary:hover {
-        background: #3a7bc8;
-        transform: translateY(-2px);
+        background: #1d4ed8;
     }
 
     .project-link-secondary {
-        background: var(--secondary);
-        color: white;
+        background: #f3f4f6;
+        color: #374151;
+        border: 1px solid #e5e7eb;
     }
 
     .project-link-secondary:hover {
-        background: #7a61a8;
-        transform: translateY(-2px);
+        background: #e5e7eb;
     }
 
     .no-projects {
         grid-column: 1 / -1;
         text-align: center;
-        padding: 3rem;
-        color: var(--secondary);
-        font-size: 1.1rem;
+        padding: 4rem;
+        color: #6b7280;
     }
 </style>
 {% endblock %}
