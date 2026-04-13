@@ -14,8 +14,6 @@
         <article class="blog-post">
             <h3><a href="/blog/{{ latest_post.slug }}/">{{ latest_post.title }}</a></h3>
             <p class="post-meta">Published on {{ latest_post.published_date|date:"F d, Y" }}</p>
-            <div class="post-excerpt">{{ latest_post.content|truncatewords:50|safe }}</div>
-            <a href="/blog/{{ latest_post.slug }}/" class="read-more">Read more →</a>
         </article>
     {% else %}
         <p>No articles published yet. Check back soon!</p>
