@@ -29,5 +29,8 @@ urlpatterns = [
     path("ckeditor5/", include('django_ckeditor_5.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-if settings.DEBUG:
-    urlpatterns += staticfiles_urlpatterns()
+# Serve static files (for admin panel and other static assets)
+# In production, these should ideally be served by Nginx, but this ensures admin works
+urlpatterns += staticfiles_urlpatterns()
+if not settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

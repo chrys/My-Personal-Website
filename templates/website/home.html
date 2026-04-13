@@ -10,7 +10,16 @@
 
 <section class="latest-article">
     <h2>My Latest Article</h2>
-    {% if latest_medium %}
+    {% if latest_posts %}
+        {% for post in latest_posts %}
+            <article class="blog-post">
+                <h3><a href="/blog/{{ post.slug }}/">{{ post.title }}</a></h3>
+                <p class="post-meta">Published on {{ post.published_date|date:"F d, Y" }}</p>
+                <div class="post-excerpt">{{ post.content|truncatewords:50|safe }}</div>
+                <a href="/blog/{{ post.slug }}/" class="read-more">Read more →</a>
+            </article>
+        {% endfor %}
+    {% elif latest_medium %}
         <article class="medium-article">
             <h3><a href="{{ latest_medium.link }}" target="_blank" rel="noopener noreferrer">{{ latest_medium.title }}</a></h3>
             <p class="source">Published on my Blog at <a href="https://medium.com/@chrys0111" target="_blank" rel="noopener noreferrer">Medium</a></p>

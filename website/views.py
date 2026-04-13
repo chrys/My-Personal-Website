@@ -94,10 +94,16 @@ def get_github_contributions():
         return None
 
 def home(request):
+    from blog.models import Post
+    
+    # Fetch latest published blog posts
+    latest_posts = Post.objects.filter(status='published').order_by('-published_date')[:3]
+    
     latest_medium = get_latest_medium_article()
     github_contributions = get_github_contributions()
     
     return render(request, 'website/home.html', {
+        'latest_posts': latest_posts,
         'latest_medium': latest_medium,
         'github_contributions': github_contributions
     })
