@@ -1,3 +1,4 @@
+from django.db.models import Count, Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Post, Tag, Comment
@@ -5,10 +6,14 @@ from .forms import CommentForm
 
 def post_list(request, tag_slug=None):
     object_list = Post.objects.filter(status='published')
+    published_tags = Tag.objects.annotate(
+        post_count=Count('posts', filter=Q(posts__status='published'), distinct=True)
+    ).filter(post_count__gt=0).order_by('-post_count', 'name')
+    tag_cloud = published_tags
     tag = None
 
     if tag_slug:
-        tag = get_object_or_404(Tag, slug=tag_slug)
+        tag = get_object_or_404(published_tags, slug=tag_slug)
         object_list = object_list.filter(tags__in=[tag])
 
     paginator = Paginator(object_list, 5)  # 5 posts per page
@@ -22,6 +27,7 @@ def post_list(request, tag_slug=None):
 
     return render(request, 'blog/post_list.html', {
         'posts': posts,
+        'tag_cloud': tag_cloud,
         'tag': tag
     })
 

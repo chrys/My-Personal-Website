@@ -8,6 +8,7 @@ class BlogViewTest(TestCase):
         self.client = Client()
         self.user = User.objects.create_user(username='testuser', password='password')
         self.tag = Tag.objects.create(name='Django', slug='django')
+        self.draft_only_tag = Tag.objects.create(name='Draft Only', slug='draft-only')
         self.published_post = Post.objects.create(
             title='Published Post',
             slug='published-post',
@@ -23,17 +24,26 @@ class BlogViewTest(TestCase):
             content='Draft content.',
             status='draft'
         )
+        self.draft_post.tags.add(self.draft_only_tag)
 
     def test_post_list_view(self):
         response = self.client.get(reverse('blog:post_list'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Published Post')
         self.assertNotContains(response, 'Draft Post')
+        self.assertIn('tag_cloud', response.context)
+        self.assertEqual(list(response.context['tag_cloud']), [self.tag])
+        self.assertNotContains(response, 'data-tag-name="Draft Only"')
 
     def test_post_list_by_tag_view(self):
         response = self.client.get(reverse('blog:post_list_by_tag', args=['django']))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Published Post')
+        self.assertContains(response, 'data-tag-active="true"')
+
+    def test_post_list_by_draft_only_tag_returns_404(self):
+        response = self.client.get(reverse('blog:post_list_by_tag', args=['draft-only']))
+        self.assertEqual(response.status_code, 404)
 
     def test_post_detail_view(self):
         # Test published post

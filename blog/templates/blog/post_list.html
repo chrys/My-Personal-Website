@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block extra_css %}
 <style>
@@ -11,9 +12,107 @@
     }
 
     .blog-container {
-        max-width: 900px;
+        max-width: 1280px;
         margin: 2rem auto;
         padding: 0 1.5rem;
+    }
+
+    .blog-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 340px;
+        gap: 2rem;
+        align-items: start;
+    }
+
+    .posts-list {
+        min-width: 0;
+    }
+
+    .blog-sidebar {
+        position: sticky;
+        top: 6.5rem;
+    }
+
+    .sidebar-card {
+        background: rgba(255, 255, 255, 0.88);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 1.25rem;
+        box-shadow: var(--shadow-sm);
+        padding: 1.5rem;
+        overflow: hidden;
+    }
+
+    .sidebar-card h2 {
+        margin: 0 0 0.5rem;
+        font-size: 1.4rem;
+        color: #0f172a;
+    }
+
+    .sidebar-card p {
+        margin: 0 0 1rem;
+        color: #64748b;
+        line-height: 1.6;
+    }
+
+    .tag-cloud-stage {
+        position: relative;
+        min-height: 320px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border-radius: 1rem;
+        background:
+            radial-gradient(circle at 50% 45%, rgba(59, 130, 246, 0.08), transparent 58%),
+            linear-gradient(180deg, rgba(248, 250, 252, 0.95), rgba(226, 232, 240, 0.7));
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        padding: 0.5rem;
+    }
+
+    .tag-cloud-stage.is-empty {
+        min-height: 0;
+        padding: 1rem 0 0;
+        justify-content: flex-start;
+    }
+
+    .tag-cloud-fallback {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+    }
+
+    .tagcloud {
+        color: #0f172a;
+        font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+    }
+
+    .tagcloud--item {
+        color: #334155;
+        text-decoration: none;
+        transition: color 0.25s ease, text-shadow 0.25s ease;
+        white-space: nowrap;
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
+        cursor: pointer;
+    }
+
+    .tagcloud--item:hover,
+    .tagcloud--item:focus-visible,
+    .tagcloud--item.is-active {
+        color: #1d4ed8;
+        text-shadow: 0 0 18px rgba(37, 99, 235, 0.2);
+        outline: none;
+    }
+
+    .tagcloud--item::after {
+        content: ' (' attr(data-count) ')';
+        color: #94a3b8;
+        font-size: 0.68em;
+        font-weight: 500;
+        margin-left: 0.24em;
     }
 
     .blog-header {
@@ -143,6 +242,45 @@
         color: white;
         border-color: var(--primary-blue);
     }
+
+    @media (max-width: 960px) {
+        .blog-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .blog-sidebar {
+            position: static;
+            order: -1;
+        }
+
+        .tag-cloud-stage {
+            min-height: 260px;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .blog-header {
+            padding: 3rem 1.5rem;
+        }
+
+        .blog-header h1 {
+            font-size: 2.5rem;
+        }
+
+        .post-card {
+            padding: 1.75rem;
+        }
+
+        .post-card h2 {
+            font-size: 1.8rem;
+        }
+
+        .post-meta {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+    }
 </style>
 {% endblock %}
 
@@ -156,50 +294,168 @@
         <p>Thoughts, tutorials, and adventures in tech and beyond.</p>
     </header>
 
-    <div class="posts-list">
-        {% for post in posts %}
-            <article class="post-card">
-                <div class="post-meta">
-                    <time datetime="{{ post.published_date|date:'Y-m-d' }}">{{ post.published_date|date:"F j, Y" }}</time>
-                    <div class="tags">
-                        {% for pt in post.tags.all %}
-                            <a href="{% url 'blog:post_list_by_tag' pt.slug %}" class="tag-badge">{{ pt.name }}</a>
-                        {% endfor %}
+    <div class="blog-layout">
+        <div class="posts-list">
+            {% for post in posts %}
+                <article class="post-card">
+                    <div class="post-meta">
+                        <time datetime="{{ post.published_date|date:'Y-m-d' }}">{{ post.published_date|date:"F j, Y" }}</time>
+                        <div class="tags">
+                            {% for pt in post.tags.all %}
+                                <a href="{% url 'blog:post_list_by_tag' pt.slug %}" class="tag-badge">{{ pt.name }}</a>
+                            {% endfor %}
+                        </div>
                     </div>
+                    <h2><a href="{% url 'blog:post_detail' post.slug %}">{{ post.title }}</a></h2>
+                    <div class="post-excerpt">
+                        {{ post.content|striptags|truncatewords:40 }}
+                    </div>
+                    <a href="{% url 'blog:post_detail' post.slug %}" class="read-more">
+                        Read continuation →
+                    </a>
+                </article>
+            {% empty %}
+                <div class="no-posts" style="text-align: center; padding: 4rem;">
+                    <p style="font-size: 1.5rem; color: #6b7280;">No posts found yet. Check back soon!</p>
                 </div>
-                <h2><a href="{% url 'blog:post_detail' post.slug %}">{{ post.title }}</a></h2>
-                <div class="post-excerpt">
-                    {{ post.content|striptags|truncatewords:40 }}
-                </div>
-                <a href="{% url 'blog:post_detail' post.slug %}" class="read-more">
-                    Read continuation →
-                </a>
-            </article>
-        {% empty %}
-            <div class="no-posts" style="text-align: center; padding: 4rem;">
-                <p style="font-size: 1.5rem; color: #6b7280;">No posts found yet. Check back soon!</p>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
+
+        <aside class="blog-sidebar">
+            <section class="sidebar-card">
+                <h2>Tag Cloud</h2>
+                <p>Browse the blog through the topics that appear most often.</p>
+                {% if tag_cloud %}
+                    <div class="tag-cloud-stage" data-tag-cloud>
+                        <div class="tag-cloud-data" hidden>
+                            {% for cloud_tag in tag_cloud %}
+                                <a
+                                    href="{% url 'blog:post_list_by_tag' cloud_tag.slug %}"
+                                    data-tag-name="{{ cloud_tag.name }}"
+                                    data-tag-count="{{ cloud_tag.post_count }}"
+                                    data-tag-active="{% if tag and tag.slug == cloud_tag.slug %}true{% else %}false{% endif %}"
+                                >{{ cloud_tag.name }}</a>
+                            {% endfor %}
+                        </div>
+                        <noscript>
+                            <div class="tag-cloud-fallback">
+                                {% for cloud_tag in tag_cloud %}
+                                    <a href="{% url 'blog:post_list_by_tag' cloud_tag.slug %}" class="tag-badge">{{ cloud_tag.name }}</a>
+                                {% endfor %}
+                            </div>
+                        </noscript>
+                    </div>
+                {% else %}
+                    <div class="tag-cloud-stage is-empty">
+                        <p>No tags yet.</p>
+                    </div>
+                {% endif %}
+            </section>
+        </aside>
     </div>
 
     {% if posts.has_other_pages %}
         <nav class="pagination">
             {% if posts.has_previous %}
-                <a href="?page={{ posts.previous_page_number }}{% if tag %}&tag={{ tag.slug }}{% endif %}">Previous</a>
+                {% if tag %}
+                    <a href="{% url 'blog:post_list_by_tag' tag.slug %}?page={{ posts.previous_page_number }}">Previous</a>
+                {% else %}
+                    <a href="?page={{ posts.previous_page_number }}">Previous</a>
+                {% endif %}
             {% endif %}
 
             {% for i in posts.paginator.page_range %}
                 {% if posts.number == i %}
                     <span class="active">{{ i }}</span>
                 {% else %}
-                    <a href="?page={{ i }}{% if tag %}&tag={{ tag.slug }}{% endif %}">{{ i }}</a>
+                    {% if tag %}
+                        <a href="{% url 'blog:post_list_by_tag' tag.slug %}?page={{ i }}">{{ i }}</a>
+                    {% else %}
+                        <a href="?page={{ i }}">{{ i }}</a>
+                    {% endif %}
                 {% endif %}
             {% endfor %}
 
             {% if posts.has_next %}
-                <a href="?page={{ posts.next_page_number }}{% if tag %}&tag={{ tag.slug }}{% endif %}">Next</a>
+                {% if tag %}
+                    <a href="{% url 'blog:post_list_by_tag' tag.slug %}?page={{ posts.next_page_number }}">Next</a>
+                {% else %}
+                    <a href="?page={{ posts.next_page_number }}">Next</a>
+                {% endif %}
             {% endif %}
         </nav>
     {% endif %}
+
+    <script src="https://cdn.jsdelivr.net/npm/TagCloud@2.3.2/dist/TagCloud.min.js"></script>
+    <script>
+        (function () {
+            const stage = document.querySelector('[data-tag-cloud]');
+            if (!stage || typeof TagCloud === 'undefined') {
+                return;
+            }
+
+            const anchors = Array.from(stage.querySelectorAll('.tag-cloud-data a'));
+            if (!anchors.length) {
+                return;
+            }
+
+            const counts = anchors.map((anchor) => Number(anchor.dataset.tagCount || 1));
+            const minCount = Math.min.apply(null, counts);
+            const maxCount = Math.max.apply(null, counts);
+            const sizeFor = function (count) {
+                if (maxCount === minCount) {
+                    return 1.15;
+                }
+                return 0.95 + ((count - minCount) / (maxCount - minCount)) * 0.85;
+            };
+
+            const items = anchors.map(function (anchor) {
+                return anchor.dataset.tagName;
+            });
+
+            TagCloud(stage, items, {
+                radius: 110,
+                maxSpeed: 'normal',
+                initSpeed: 'slow',
+                direction: 110,
+                keep: true
+            });
+
+            Array.from(stage.querySelectorAll('.tagcloud--item')).forEach(function (item, index) {
+                const source = anchors[index];
+                const count = source.dataset.tagCount || '1';
+                item.dataset.count = count;
+                item.dataset.href = source.href;
+                item.style.fontSize = sizeFor(Number(count)).toFixed(2) + 'rem';
+                item.setAttribute('role', 'link');
+                item.setAttribute('tabindex', '0');
+                item.setAttribute('aria-label', source.dataset.tagName + ' (' + count + ' posts)');
+
+                if (source.dataset.tagActive === 'true') {
+                    item.classList.add('is-active');
+                    item.setAttribute('aria-current', 'page');
+                }
+            });
+
+            stage.addEventListener('click', function (event) {
+                const item = event.target.closest('.tagcloud--item');
+                if (!item || !item.dataset.href) {
+                    return;
+                }
+                window.location.href = item.dataset.href;
+            });
+
+            stage.addEventListener('keydown', function (event) {
+                const item = event.target.closest('.tagcloud--item');
+                if (!item || !item.dataset.href) {
+                    return;
+                }
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    window.location.href = item.dataset.href;
+                }
+            });
+        }());
+    </script>
 </div>
 {% endblock %}
