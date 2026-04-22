@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section id="contact-me" class="contact-page">
+    <div class="contact-card">
+        <h1>Contact Me</h1>
+        <p class="contact-lead">I usually reply within 24 to 48 hours.</p>
+
+        {% if contact_status == 'success' %}
+            <p class="contact-message success">Thanks for reaching out. Your message has been sent.</p>
+        {% elif contact_status == 'rate_limited' %}
+            <p class="contact-message error">Too many attempts from your network. Please wait and try again in about an hour.</p>
+        {% elif contact_status == 'error' %}
+            <p class="contact-message error">Sorry, your message could not be sent right now. Please try again later.</p>
+        {% endif %}
+
+        <form method="post" class="contact-form" novalidate>
+            {% csrf_token %}
+            {{ contact_form.website }}
+
+            <div class="form-field">
+                <label for="id_name">Name</label>
+                {{ contact_form.name }}
+                {{ contact_form.name.errors }}
+            </div>
+
+            <div class="form-field">
+                <label for="id_email">Email</label>
+                {{ contact_form.email }}
+                {{ contact_form.email.errors }}
+            </div>
+
+            <div class="form-field">
+                <label for="id_message">Message</label>
+                {{ contact_form.message }}
+                {{ contact_form.message.errors }}
+            </div>
+
+            <button type="submit" class="contact-submit">Send Message</button>
+        </form>
+    </div>
+</section>
+{% endblock %}
