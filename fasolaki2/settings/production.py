@@ -62,6 +62,7 @@ LOGGING = {
     },
     'root': {
         'handlers': ['console'],
+        'level': 'INFO',
     },
     'loggers': {
         'django': {
@@ -70,6 +71,11 @@ LOGGING = {
             'propagate': False,
         },
         'fasolaki2': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'website': {
             'handlers': ['console', 'file'],
             'level': 'INFO',
             'propagate': False,
