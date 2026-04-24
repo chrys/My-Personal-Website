@@ -66,9 +66,13 @@ def send_contact_email_via_mailjet(contact_data):
             timeout=10,
         )
         response.raise_for_status()
+        logger.info('Mailjet accepted contact form submission for %s with status %s', recipient_email, response.status_code)
         return True
     except Exception as exc:
-        logger.error(f'Error sending Mailjet email: {exc}')
+        response_text = ''
+        if hasattr(exc, 'response') and exc.response is not None:
+            response_text = exc.response.text
+        logger.error('Error sending Mailjet email: %s %s', exc, response_text)
         return False
 
 def get_github_contributions():
@@ -164,10 +168,14 @@ def contact(request):
             cache.set(rate_limit_key, current_attempts + 1, CONTACT_RATE_LIMIT_WINDOW_SECONDS)
             contact_form = ContactForm(request.POST)
             if contact_form.is_valid():
-                # If honeypot is tripped, treat as success but do not send email.
+                # If honeypot is tripped, stop here and avoid claiming the message was sent.
                 if contact_form.cleaned_data.get('website'):
-                    contact_status = 'success'
-                    contact_form = ContactForm()
+                    logger.warning(
+                        'Blocked contact form submission via honeypot from IP %s with user agent %s',
+                        client_ip,
+                        request.META.get('HTTP_USER_AGENT', 'unknown'),
+                    )
+                    contact_status = 'blocked'
                 else:
                     email_sent = send_contact_email_via_mailjet(contact_form.cleaned_data)
                     if email_sent:

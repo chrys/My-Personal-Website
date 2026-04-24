@@ -24,7 +24,15 @@ class ContactForm(forms.Form):
             "placeholder": "Tell me about your project, question, or collaboration idea.",
         }),
     )
-    website = forms.CharField(required=False, widget=forms.HiddenInput)
+    website = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            "autocomplete": "off",
+            "tabindex": "-1",
+            "aria-hidden": "true",
+            "class": "contact-honeypot-input",
+        }),
+    )
 
     def clean_message(self):
         message = self.cleaned_data['message']

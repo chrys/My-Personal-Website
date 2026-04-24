@@ -67,6 +67,15 @@
         gap: 1.5rem;
     }
 
+    .contact-honeypot {
+        position: absolute;
+        left: -10000px;
+        top: auto;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+    }
+
     .form-field {
         display: flex;
         flex-direction: column;
@@ -201,6 +210,8 @@
 
         {% if contact_status == 'success' %}
             <p class="contact-message success">Thanks for reaching out. Your message has been sent.</p>
+        {% elif contact_status == 'blocked' %}
+            <p class="contact-message error">Your submission could not be verified. Please try again.</p>
         {% elif contact_status == 'rate_limited' %}
             <p class="contact-message error">Too many attempts from your network. Please wait and try again in about an hour.</p>
         {% elif contact_status == 'error' %}
@@ -209,7 +220,10 @@
 
         <form method="post" class="contact-form" novalidate>
             {% csrf_token %}
-            {{ contact_form.website }}
+            <div class="contact-honeypot" aria-hidden="true">
+                <label for="id_website">Leave this field empty</label>
+                {{ contact_form.website }}
+            </div>
 
             <div class="form-field">
                 <label for="id_name">Name</label>
