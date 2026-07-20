@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .models import MyProject
 
 def projects_list(request):
-    projects = MyProject.objects.filter(status='active')
+    projects = MyProject.objects.exclude(status='dropped')
     return render(request, 'portfolio/projects_list.html', {
         'projects': projects
     })

@@ -1,223 +1,102 @@
 {% extends "base.html" %}
 
-{% block extra_css %}
-<style>
-    .post-detail-container {
-        max-width: 800px;
-        margin: 2rem auto;
-        padding: 0 1.5rem;
-    }
-
-    .post-header {
-        margin-bottom: 3rem;
-        text-align: center;
-    }
-
-    .post-meta {
-        color: #6b7280;
-        font-size: 0.875rem;
-        margin-bottom: 1.5rem;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-    }
-
-    .post-title {
-        font-size: 3.5rem;
-        font-weight: 800;
-        color: #111827;
-        margin-bottom: 2rem;
-        line-height: 1.2;
-    }
-
-    .tag-container {
-        display: flex;
-        justify-content: center;
-        gap: 0.75rem;
-        margin-bottom: 3rem;
-    }
-
-    .tag-badge {
-        background: #f1f5f9;
-        color: #475569;
-        padding: 0.5rem 1rem;
-        border-radius: 9999px;
-        font-weight: 600;
-        text-decoration: none;
-        transition: all 0.2s ease;
-    }
-
-    .tag-badge:hover {
-        background: #3b82f6;
-        color: white;
-    }
-
-    .post-content {
-        font-size: 1.25rem;
-        line-height: 1.95;
-        color: #374151;
-        margin-bottom: 5rem;
-        word-break: break-word;
-    }
-
-    .post-content h1, .post-content h2, .post-content h3 {
-        margin-top: 2rem;
-        margin-bottom: 1rem;
-        color: #111827;
-    }
-
-    .post-content img {
-        max-width: 100%;
-        height: auto;
-        border-radius: 1rem;
-        margin: 2rem 0;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    }
-
-    .comment-section {
-        border-top: 1px solid #e5e7eb;
-        padding-top: 4rem;
-        margin-top: 4rem;
-    }
-
-    .comment-section h3 {
-        font-size: 2rem;
-        font-weight: 800;
-        margin-bottom: 3rem;
-        color: #111827;
-    }
-
-    .comments-list {
-        margin-bottom: 5rem;
-    }
-
-    .comment-item {
-        background: #f9fafb;
-        padding: 2rem;
-        border-radius: 1rem;
-        margin-bottom: 2rem;
-        border: 1px solid #f3f4f6;
-    }
-
-    .comment-meta {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 1rem;
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: #4b5563;
-    }
-
-    .comment-body {
-        color: #374151;
-        line-height: 1.6;
-    }
-
-    .comment-form-container {
-        background: white;
-        padding: 3rem;
-        border-radius: 1.5rem;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        border: 1px solid #e5e7eb;
-    }
-
-    .comment-form-container h4 {
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin-bottom: 2rem;
-    }
-
-    .form-group {
-        margin-bottom: 1.5rem;
-    }
-
-    .form-control {
-        width: 100%;
-        padding: 0.75rem 1rem;
-        border-radius: 0.5rem;
-        border: 1px solid #d1d5db;
-        transition: all 0.2s ease;
-    }
-
-    .form-control:focus {
-        border-color: #3b82f6;
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        outline: none;
-    }
-
-    .btn-submit {
-        background: #2563eb;
-        color: white;
-        padding: 0.75rem 2rem;
-        border-radius: 0.5rem;
-        border: none;
-        font-weight: 700;
-        cursor: pointer;
-        transition: background 0.2s ease;
-    }
-
-    .btn-submit:hover {
-        background: #1d4ed8;
-    }
-</style>
-{% endblock %}
+{% block title %}{{ post.title }} | Fasolaki Blog{% endblock %}
 
 {% block content %}
-<article class="post-detail-container">
-    <header class="post-header">
-        <div class="post-meta">
-            {{ post.published_date|date:"F j, Y" }} — By {{ post.author.get_full_name|default:post.author.username }}
+<article class="max-w-4xl mx-auto">
+    <!-- Navigation Back -->
+    <a href="{% url 'blog:post_list' %}" class="inline-flex items-center gap-2 font-label-sm text-label-sm text-outline hover:text-primary mb-6 transition-colors">
+        <span class="material-symbols-outlined text-sm">arrow_back</span>
+        <span>Back to Articles</span>
+    </a>
+
+    <!-- Header Section -->
+    <header class="mb-8 text-left">
+        <div class="flex items-center gap-3 mb-4 flex-wrap">
+            <span class="font-mono text-label-sm text-primary font-bold">{{ post.published_date|date:"F j, Y" }}</span>
+            <span class="text-outline text-[12px]">•</span>
+            <span class="font-mono text-label-sm text-outline">By {{ post.author.get_full_name|default:post.author.username }}</span>
         </div>
-        <h1 class="post-title">{{ post.title }}</h1>
-        <div class="tag-container">
+        <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-6 leading-tight">
+            {{ post.title }}
+        </h1>
+        <div class="flex gap-2 flex-wrap mb-6">
             {% for pt in post.tags.all %}
-                <a href="{% url 'blog:post_list_by_tag' pt.slug %}" class="tag-badge">#{{ pt.name }}</a>
+                <a href="{% url 'blog:post_list_by_tag' pt.slug %}" class="px-3 py-1 bg-surface-container-highest/60 rounded-lg text-label-sm font-label-sm text-primary border border-primary/20 hover:border-primary/50">#{{ pt.name }}</a>
             {% endfor %}
         </div>
     </header>
 
-    <div class="post-content">
-        {{ post.content|safe }}
+    <!-- Main Content Container -->
+    <div class="bg-surface-container-low rounded-2xl p-6 md:p-10 border border-primary/10 micro-shadow mb-12">
+        <div class="post-content">
+            {{ post.content|safe }}
+        </div>
     </div>
 
-    <section class="comment-section">
-        <h3>{{ comments.count }} Comments</h3>
+    <!-- Comments Section -->
+    <section class="mt-12 pt-8 border-t border-primary/10">
+        <h3 class="font-headline-md text-headline-md text-on-surface mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">chat</span>
+            {{ comments.count }} Comment{% if comments.count != 1 %}s{% endif %}
+        </h3>
 
-        <div class="comments-list">
+        <!-- Comments List -->
+        <div class="space-y-4 mb-10">
             {% for comment in comments %}
-                <div class="comment-item">
-                    <div class="comment-meta">
-                        <span class="comment-author">{{ comment.name }}</span>
-                        <span class="comment-date">{{ comment.created_date|date:"M j, Y" }}</span>
+                <div class="bg-surface-container-low border border-primary/10 rounded-xl p-5 micro-shadow">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="font-headline-md text-base text-on-surface font-bold">{{ comment.name }}</span>
+                        <span class="font-mono text-label-sm text-outline">{{ comment.created_date|date:"M j, Y — H:i" }}</span>
                     </div>
-                    <div class="comment-body">
+                    <div class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
                         {{ comment.body|linebreaks }}
                     </div>
                 </div>
             {% empty %}
-                <p style="color: #6b7280; font-style: italic;">No comments yet. Be the first to start the conversation!</p>
+                <div class="p-6 bg-surface-container-lowest rounded-xl border border-primary/10 text-center text-on-surface-variant">
+                    <p class="font-body-md text-body-md italic">No comments yet. Be the first to start the conversation!</p>
+                </div>
             {% endfor %}
         </div>
 
-        <div class="comment-form-container">
-            <h4>Leave a Response</h4>
-            <form method="post" action=".">
+        <!-- Comment Form -->
+        <div class="bg-surface-container-low border border-primary/10 rounded-xl p-6 md:p-8 micro-shadow">
+            <h4 class="font-headline-md text-headline-md text-on-surface mb-6 flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">edit_note</span>
+                Leave a Response
+            </h4>
+
+            <form method="post" action="." class="space-y-4">
                 {% csrf_token %}
-                <div class="form-group">
-                    {{ comment_form.name.label_tag }}
-                    {{ comment_form.name }}
-                    {{ comment_form.name.errors }}
+
+                <div>
+                    <label for="id_name" class="block font-label-sm text-label-sm text-on-surface mb-2 font-bold">Name</label>
+                    <input type="text" name="name" id="id_name" required class="w-full bg-surface-container-lowest border border-primary/20 rounded-lg px-4 py-2 text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none transition-all" placeholder="Your name"/>
+                    {% if comment_form.name.errors %}
+                        <p class="text-red-400 text-xs mt-1">{{ comment_form.name.errors.0 }}</p>
+                    {% endif %}
                 </div>
-                <div class="form-group">
-                    {{ comment_form.email.label_tag }}
-                    {{ comment_form.email }}
-                    {{ comment_form.email.errors }}
+
+                <div>
+                    <label for="id_email" class="block font-label-sm text-label-sm text-on-surface mb-2 font-bold">Email</label>
+                    <input type="email" name="email" id="id_email" required class="w-full bg-surface-container-lowest border border-primary/20 rounded-lg px-4 py-2 text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none transition-all" placeholder="your.email@domain.com"/>
+                    {% if comment_form.email.errors %}
+                        <p class="text-red-400 text-xs mt-1">{{ comment_form.email.errors.0 }}</p>
+                    {% endif %}
                 </div>
-                <div class="form-group">
-                    {{ comment_form.body.label_tag }}
-                    {{ comment_form.body }}
-                    {{ comment_form.body.errors }}
+
+                <div>
+                    <label for="id_body" class="block font-label-sm text-label-sm text-on-surface mb-2 font-bold">Comment</label>
+                    <textarea name="body" id="id_body" rows="4" required class="w-full bg-surface-container-lowest border border-primary/20 rounded-lg px-4 py-2 text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none transition-all" placeholder="Write your comment here..."></textarea>
+                    {% if comment_form.body.errors %}
+                        <p class="text-red-400 text-xs mt-1">{{ comment_form.body.errors.0 }}</p>
+                    {% endif %}
                 </div>
-                <button type="submit" class="btn-submit">Post Comment</button>
+
+                <button type="submit" class="bg-primary text-on-primary font-bold px-6 py-2.5 rounded-lg text-label-sm hover:opacity-90 active:scale-95 transition-all shadow-[0_0_20px_rgba(16,185,129,0.25)]">
+                    Post Comment
+                </button>
             </form>
         </div>
     </section>

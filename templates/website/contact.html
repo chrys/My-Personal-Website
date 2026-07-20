@@ -1,251 +1,94 @@
 {% extends "base.html" %}
 
-{% block extra_css %}
-<style>
-    :root {
-        --primary-blue: #2563eb;
-        --secondary-gray: #4b5563;
-        --bg-glass: rgba(255, 255, 255, 0.8);
-        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-    }
-
-    .contact-container {
-        max-width: 700px;
-        margin: 2rem auto;
-        padding: 0 1.5rem;
-    }
-
-    .contact-header {
-        text-align: center;
-        margin-bottom: 3rem;
-        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-        color: white;
-        padding: 3rem 2rem;
-        border-radius: 1.5rem;
-        box-shadow: var(--shadow-md);
-    }
-
-    .contact-header h1 {
-        font-size: 2.8rem;
-        font-weight: 800;
-        margin-bottom: 0.8rem;
-        letter-spacing: -0.025em;
-    }
-
-    .contact-header p {
-        font-size: 1.1rem;
-        opacity: 0.9;
-        margin: 0;
-    }
-
-    .contact-page {
-        max-width: 700px;
-        margin: 0 auto;
-        padding: 0;
-    }
-
-    .contact-card {
-        background: rgba(255, 255, 255, 0.88);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.4);
-        border-radius: 1.25rem;
-        box-shadow: var(--shadow-sm);
-        padding: 2rem;
-    }
-
-    .contact-lead {
-        margin: 0 0 1.5rem;
-        color: #64748b;
-        font-size: 1rem;
-        line-height: 1.6;
-    }
-
-    .contact-form {
-        display: grid;
-        gap: 1.5rem;
-    }
-
-    .contact-honeypot {
-        position: absolute;
-        left: -10000px;
-        top: auto;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-    }
-
-    .form-field {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
-    .form-field label {
-        font-size: 0.95rem;
-        font-weight: 600;
-        color: #0f172a;
-    }
-
-    .form-field input,
-    .form-field textarea {
-        width: 100%;
-        box-sizing: border-box;
-        border: 1px solid #e2e8f0;
-        border-radius: 0.75rem;
-        background: #fff;
-        padding: 0.75rem 1rem;
-        font: inherit;
-        font-size: 1rem;
-        color: #1e293b;
-        transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-    }
-
-    .form-field input::placeholder,
-    .form-field textarea::placeholder {
-        color: #94a3b8;
-    }
-
-    .form-field input:hover,
-    .form-field textarea:hover {
-        border-color: #cbd5e1;
-        background-color: #f8fafc;
-    }
-
-    .form-field input:focus,
-    .form-field textarea:focus {
-        outline: none;
-        border-color: var(--primary-blue);
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        background-color: #fff;
-    }
-
-    .form-field textarea {
-        min-height: 180px;
-        resize: vertical;
-        font-family: inherit;
-    }
-
-    .form-field ul {
-        margin: 0.5rem 0 0;
-        padding-left: 1.5rem;
-        color: #dc2626;
-        font-size: 0.875rem;
-    }
-
-    .form-field ul li {
-        margin-bottom: 0.25rem;
-    }
-
-    .contact-submit {
-        width: fit-content;
-        border: 0;
-        border-radius: 0.75rem;
-        padding: 0.875rem 1.75rem;
-        background: linear-gradient(120deg, var(--primary-blue), #1e40af);
-        color: #fff;
-        font-weight: 600;
-        font-size: 1rem;
-        letter-spacing: 0.01em;
-        cursor: pointer;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .contact-submit:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
-    }
-
-    .contact-submit:active {
-        transform: translateY(0);
-    }
-
-    .contact-message {
-        border-radius: 0.75rem;
-        border-left: 4px solid;
-        padding: 1rem;
-        margin-bottom: 1.5rem;
-        font-weight: 500;
-    }
-
-    .contact-message.success {
-        background: #ecfdf5;
-        border-left-color: #10b981;
-        color: #065f46;
-    }
-
-    .contact-message.error {
-        background: #fef2f2;
-        border-left-color: #ef4444;
-        color: #7f1d1d;
-    }
-
-    @media (max-width: 640px) {
-        .contact-header {
-            padding: 2rem 1.5rem;
-        }
-
-        .contact-header h1 {
-            font-size: 2rem;
-        }
-
-        .contact-card {
-            border-radius: 1rem;
-            padding: 1.5rem;
-        }
-    }
-</style>
-{% endblock %}
+{% block title %}Contact Me | Fasolaki{% endblock %}
 
 {% block content %}
-<div class="contact-container">
-    <header class="contact-header">
-        <h1>Contact Me</h1>
-        <p>I usually reply within 24 to 48 hours.</p>
+<div class="max-w-2xl mx-auto">
+    <!-- Header Section -->
+    <header class="mb-8 text-center">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-primary/10 border border-primary/20 text-primary mb-4 font-mono text-label-sm">
+            <span class="material-symbols-outlined text-sm">mail</span>
+            <span>Communication Terminal</span>
+        </div>
+        <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-4 text-on-surface leading-tight">
+            Get In <span class="text-primary emerald-glow">Touch</span>
+        </h1>
+        <p class="font-body-lg text-body-lg text-on-surface-variant">
+            Have a project, query, or technical feedback? I usually reply within 24 to 48 hours.
+        </p>
     </header>
 
-    <section id="contact-me" class="contact-page">
-        <div class="contact-card">
-
+    <!-- Form Container -->
+    <div class="bg-surface-container-low rounded-2xl p-6 md:p-10 border border-primary/10 micro-shadow glass-panel">
         {% if contact_status == 'success' %}
-            <p class="contact-message success">Thanks for reaching out. Your message has been sent.</p>
+            <div class="p-4 mb-6 rounded-xl bg-primary/10 border border-primary/30 text-primary flex items-center gap-3 font-body-md text-body-md">
+                <span class="material-symbols-outlined text-xl">check_circle</span>
+                <span>Thanks for reaching out! Your message has been sent successfully.</span>
+            </div>
         {% elif contact_status == 'blocked' %}
-            <p class="contact-message error">Your submission could not be verified. Please try again.</p>
+            <div class="p-4 mb-6 rounded-xl bg-red-950/40 border border-red-500/30 text-red-300 flex items-center gap-3 font-body-md text-body-md">
+                <span class="material-symbols-outlined text-xl">block</span>
+                <span>Your submission could not be verified. Please try again.</span>
+            </div>
         {% elif contact_status == 'rate_limited' %}
-            <p class="contact-message error">Too many attempts from your network. Please wait and try again in about an hour.</p>
+            <div class="p-4 mb-6 rounded-xl bg-red-950/40 border border-red-500/30 text-red-300 flex items-center gap-3 font-body-md text-body-md">
+                <span class="material-symbols-outlined text-xl">hourglass_bottom</span>
+                <span>Too many attempts from your network. Please wait and try again in about an hour.</span>
+            </div>
         {% elif contact_status == 'error' %}
-            <p class="contact-message error">Sorry, your message could not be sent right now. Please try again later.</p>
+            <div class="p-4 mb-6 rounded-xl bg-red-950/40 border border-red-500/30 text-red-300 flex items-center gap-3 font-body-md text-body-md">
+                <span class="material-symbols-outlined text-xl">error</span>
+                <span>Sorry, your message could not be sent right now. Please try again later.</span>
+            </div>
         {% endif %}
 
-        <form method="post" class="contact-form" novalidate>
+        <form method="post" class="space-y-6" novalidate>
             {% csrf_token %}
-            <div class="contact-honeypot" aria-hidden="true">
+            
+            <!-- Honeypot -->
+            <div class="sr-only" aria-hidden="true">
                 <label for="id_website">Leave this field empty</label>
                 {{ contact_form.website }}
             </div>
 
-            <div class="form-field">
-                <label for="id_name">Name</label>
-                {{ contact_form.name }}
-                {{ contact_form.name.errors }}
+            <div>
+                <label for="id_name" class="block font-label-sm text-label-sm text-on-surface mb-2 font-bold flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-sm text-primary">person</span>
+                    Name
+                </label>
+                <input type="text" name="name" id="id_name" required value="{{ contact_form.name.value|default:'' }}" class="w-full bg-surface-container-lowest border border-primary/20 rounded-lg px-4 py-2.5 text-body-md text-on-surface placeholder:text-outline focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none transition-all" placeholder="Ada Lovelace"/>
+                {% if contact_form.name.errors %}
+                    <p class="text-red-400 text-xs mt-1">{{ contact_form.name.errors.0 }}</p>
+                {% endif %}
             </div>
 
-            <div class="form-field">
-                <label for="id_email">Email</label>
-                {{ contact_form.email }}
-                {{ contact_form.email.errors }}
+            <div>
+                <label for="id_email" class="block font-label-sm text-label-sm text-on-surface mb-2 font-bold flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-sm text-primary">alternate_email</span>
+                    Email
+                </label>
+                <input type="email" name="email" id="id_email" required value="{{ contact_form.email.value|default:'' }}" class="w-full bg-surface-container-lowest border border-primary/20 rounded-lg px-4 py-2.5 text-body-md text-on-surface placeholder:text-outline focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none transition-all" placeholder="engineer@domain.com"/>
+                {% if contact_form.email.errors %}
+                    <p class="text-red-400 text-xs mt-1">{{ contact_form.email.errors.0 }}</p>
+                {% endif %}
             </div>
 
-            <div class="form-field">
-                <label for="id_message">Message</label>
-                {{ contact_form.message }}
-                {{ contact_form.message.errors }}
+            <div>
+                <label for="id_message" class="block font-label-sm text-label-sm text-on-surface mb-2 font-bold flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-sm text-primary">chat_bubble</span>
+                    Message
+                </label>
+                <textarea name="message" id="id_message" rows="6" required class="w-full bg-surface-container-lowest border border-primary/20 rounded-lg px-4 py-2.5 text-body-md text-on-surface placeholder:text-outline focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none transition-all" placeholder="Describe your project, question, or ideas...">{{ contact_form.message.value|default:'' }}</textarea>
+                {% if contact_form.message.errors %}
+                    <p class="text-red-400 text-xs mt-1">{{ contact_form.message.errors.0 }}</p>
+                {% endif %}
             </div>
 
-            <button type="submit" class="contact-submit">Send Message</button>
+            <button type="submit" class="w-full md:w-auto bg-primary text-on-primary font-bold px-8 py-3 rounded-lg text-label-sm hover:opacity-90 active:scale-95 transition-all shadow-[0_0_25px_rgba(16,185,129,0.25)] inline-flex items-center justify-center gap-2">
+                <span>Send Message</span>
+                <span class="material-symbols-outlined text-sm">send</span>
+            </button>
         </form>
-        </div>
-    </section>
+    </div>
 </div>
 {% endblock %}
